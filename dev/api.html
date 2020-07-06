@@ -1,0 +1,406 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Reference &#8212; Games IA  documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Stratego" href="../user/juego.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Games IA</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">IA design for board-games</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Mr-Io&repo=stratego&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../user/juego.html">Stratego</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#user-session">User session</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#connection-and-events">Connection and events</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#make-a-challenge">Make a challenge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#accept-decline">Accept/decline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#make-a-move">Make a move</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#game-example">Game example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#future-work">Future work</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../user/juego.html" title="previous chapter">Stratego</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://media.giphy.com/media/sMvYXLh8fFbCU/giphy.gif"><img alt="generic shield" src="https://img.shields.io/badge/version-0.0.0-green.svg" /></a> <a class="reference external" href="https://media.giphy.com/media/sMvYXLh8fFbCU/giphy.gif"><img alt="License" src="https://img.shields.io/badge/license-por_definir-blue.svg" /></a> <a class="reference external" href="https://media.giphy.com/media/sMvYXLh8fFbCU/giphy.gif"><img alt="Contributors" src="https://img.shields.io/badge/contributors-2-red.svg" /></a></p>
+<p>This is the API reference for playing games using the Game Control Server (GCS).</p>
+<p>The main purpose of the GCS is to host games, its responsibilities include:</p>
+<ul class="simple">
+<li><p>To manage challenges and games</p></li>
+<li><p>To guaranteeing that the rules of each specific game are followed</p></li>
+<li><p>To detect when a game is finished, indicating the winner</p></li>
+</ul>
+<p>(Note: the responses are all <em>application/json</em>)</p>
+<p><strong>This API is designed following the OpenAPI specification, being simple but
+also flexible enough for any turn-based board game.</strong></p>
+<div class="section" id="user-session">
+<h2>User session<a class="headerlink" href="#user-session" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">GET</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">user</span><span class="o">/</span><span class="p">{</span><span class="nx">username</span><span class="p">}</span>
+</pre></div>
+</div>
+<ul>
+<li><p>This should initiate a user session (without authentication)</p></li>
+<li><p>If the user doesn’t exist, a new user must be created on the fly</p></li>
+<li><p><strong>Response</strong> (200 OK)</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;userid&quot;</span><span class="o">:</span> <span class="s2">&quot;sergio&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;username&quot;</span><span class="o">:</span> <span class="s2">&quot;Sergio&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>For the usage of the rest of the api, the user must have initiated session first.</p>
+</div>
+<div class="section" id="connection-and-events">
+<h2>Connection and events<a class="headerlink" href="#connection-and-events" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">GET</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">stream</span><span class="o">/</span><span class="nx">event</span>
+</pre></div>
+</div>
+<ul>
+<li><p>This is usually the second step just after initiating the session</p></li>
+<li><p>This is a permanent connection (stream of data)</p></li>
+<li><p>The different types of events are:</p>
+<ul class="simple">
+<li><p><em>gameStart</em></p></li>
+<li><p><em>gameFinish</em></p></li>
+<li><p><em>challenge</em></p></li>
+<li><p><em>challengeCancelled</em></p></li>
+<li><p><em>challengeDeclined</em></p></li>
+<li><p><em>move</em></p></li>
+</ul>
+</li>
+<li><p><strong>Responses</strong></p>
+<ul>
+<li><p>When <em>gameStart</em> (200 OK):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;gameStart&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;gameid&quot;</span><span class="p">:</span> <span class="mi">72391</span><span class="p">,</span>
+    <span class="nt">&quot;time&quot;</span><span class="p">:</span> <span class="mi">3600</span><span class="p">,</span>
+    <span class="nt">&quot;increment&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="nt">&quot;variant&quot;</span><span class="p">:</span> <span class="s2">&quot;estratego-2players-board3&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;random&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;opponent&quot;</span><span class="p">:</span> <span class="s2">&quot;sergio&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>When <em>gameFinish</em> (200 OK) notice that a game is defined by the initial positions
+of the players and the movements done (the meaning of the fields are explained latter):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;gameFinish&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;gameid&quot;</span><span class="p">:</span> <span class="mi">72391</span><span class="p">,</span>
+    <span class="nt">&quot;player1&quot;</span><span class="p">:</span> <span class="s2">&quot;sergio-red&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;player2&quot;</span><span class="p">:</span> <span class="s2">&quot;mario-blue&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;initpos1&quot;</span><span class="p">:</span> <span class="s2">&quot;a3 i4 j4 [...] h1&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;initpos2&quot;</span><span class="p">:</span> <span class="s2">&quot; a4 i7 j7 [...] h10&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;moves&quot;</span><span class="p">:</span> <span class="s2">&quot;a4a5 j7j6 a5a6 j6j5 [...]&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;winner&quot;</span><span class="p">:</span> <span class="s2">&quot;sergio-red&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>When <em>challenge</em> (200 OK):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;challenge&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;gameid&quot;</span><span class="p">:</span> <span class="mi">15341</span><span class="p">,</span>
+    <span class="nt">&quot;time&quot;</span><span class="p">:</span> <span class="mi">3600</span><span class="p">,</span>
+    <span class="nt">&quot;increment&quot;</span><span class="p">:</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="nt">&quot;variant&quot;</span><span class="p">:</span> <span class="s2">&quot;estratego-2players-board3&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;random&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>When <em>challengeCancelled</em> (200 OK):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;challengeCancelled&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;gameid&quot;</span><span class="p">:</span> <span class="mi">15341</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>When <em>challengeDeclined</em> (200 OK):</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;challengeDeclined&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;gameid&quot;</span><span class="p">:</span> <span class="mi">15341</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+<li><p>When <em>move</em>:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="nt">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;move&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;gameid&quot;</span><span class="p">:</span> <span class="mi">417940</span><span class="p">,</span>
+    <span class="nt">&quot;move&quot;</span><span class="p">:</span> <span class="s2">&quot;a4a5&quot;</span><span class="p">,</span>
+    <span class="nt">&quot;time-left&quot;</span><span class="p">:</span> <span class="mi">600</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="make-a-challenge">
+<h2>Make a challenge<a class="headerlink" href="#make-a-challenge" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">POST</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">challenge</span>
+
+<span class="p">{</span>
+    <span class="s2">&quot;user&quot;</span><span class="o">:</span> <span class="s2">&quot;any&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;time&quot;</span><span class="o">:</span> <span class="mi">120</span><span class="p">,</span>
+    <span class="s2">&quot;increment&quot;</span><span class="o">:</span> <span class="mi">15</span><span class="p">,</span>
+    <span class="s2">&quot;variant&quot;</span><span class="o">:</span> <span class="s2">&quot;estratego-2players-board3&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;color&quot;</span><span class="o">:</span> <span class="s2">&quot;random&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;initpos&quot;</span><span class="o">:</span> <span class="s2">&quot;a3 i4 j4 [...] h1&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul>
+<li><p>The challenge is maintained until the connection is closed or
+the challenge is accepted/declined</p></li>
+<li><p>The initial position of the player pieces is indicated in <em>initpos</em>.
+The order (and number) of pieces is defined by the <em>variant</em> of that specific game.
+The default ordering is the following:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Mariscal     x1</p></li>
+<li><p>General          x1</p></li>
+<li><p>Coronel          x2</p></li>
+<li><p>Comandante   x3</p></li>
+<li><p>Capitán          x4</p></li>
+<li><p>Teniente         x4</p></li>
+<li><p>Sargento         x4</p></li>
+<li><p>Minador      x5</p></li>
+<li><p>Explorador   x8</p></li>
+<li><p>Espía        x1</p></li>
+<li><p>Bomba        x6</p></li>
+<li><p>Bandera      x1</p></li>
+</ol>
+</div></blockquote>
+</li>
+<li><p><strong>Response</strong> (200 OK)</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;gameid&quot;</span><span class="o">:</span> <span class="mi">12345</span><span class="p">,</span>
+    <span class="s2">&quot;ok&quot;</span><span class="o">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="accept-decline">
+<h2>Accept/decline<a class="headerlink" href="#accept-decline" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">POST</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">challenge</span><span class="o">/</span><span class="p">{</span><span class="nx">challengeid</span><span class="p">}</span>
+
+<span class="p">{</span>
+    <span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;accept&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;initpos&quot;</span><span class="o">:</span> <span class="s2">&quot; a4 i7 j7 [...] h10&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">POST</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">challenge</span><span class="o">/</span><span class="p">{</span><span class="nx">challengeid</span><span class="p">}</span>
+
+<span class="p">{</span>
+    <span class="s2">&quot;action&quot;</span><span class="o">:</span> <span class="s2">&quot;decline&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><em>initpos</em> is mandatory when accepting a challenge.</p></li>
+<li><p>The number and order for the <em>initpos</em> is defined by the game <em>variant</em></p></li>
+<li><p><strong>Response</strong> (200 OK)</p></li>
+</ul>
+<blockquote>
+<div><div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;ok&quot;</span><span class="o">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="make-a-move">
+<h2>Make a move<a class="headerlink" href="#make-a-move" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">POST</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">game</span><span class="o">/</span><span class="p">{</span><span class="nx">gameid</span><span class="p">}</span>
+
+<span class="p">{</span>
+    <span class="s2">&quot;move&quot;</span><span class="o">:</span> <span class="s2">&quot;a4a5&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<ul>
+<li><p>A move its defined by its initial and final position.</p></li>
+<li><p>If the player wants to resign, the <em>move</em> is set to <em>“resign”</em>.</p></li>
+<li><p><strong>Response</strong> (200 OK)</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s2">&quot;ok&quot;</span><span class="o">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="game-example">
+<h2>Game example<a class="headerlink" href="#game-example" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic">
+<li><p>Player 1 connects:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">GET</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">user</span><span class="o">/</span><span class="nx">player1</span>       <span class="o">-&gt;</span> <span class="nx">receive</span> <span class="mi">200</span> <span class="nx">OK</span>
+<span class="nx">GET</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">stream</span><span class="o">/</span><span class="nx">event</span>       <span class="o">-&gt;</span> <span class="nx">maintain</span> <span class="nx">connection</span>
+</pre></div>
+</div>
+</li>
+<li><p>Player 2 connects:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">GET</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">user</span><span class="o">/</span><span class="nx">player2</span>       <span class="o">-&gt;</span> <span class="nx">receive</span> <span class="mi">200</span> <span class="nx">OK</span>
+<span class="nx">GET</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">stream</span><span class="o">/</span><span class="nx">event</span>       <span class="o">-&gt;</span> <span class="nx">maintain</span> <span class="nx">connection</span>
+</pre></div>
+</div>
+</li>
+<li><p>Player 2 makes a challenge (to <em>“any”</em> or to <em>“player1</em>):</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">POST</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">challenge</span>         <span class="o">-&gt;</span> <span class="nx">receives</span> <span class="mi">200</span> <span class="nx">OK</span>
+</pre></div>
+</div>
+</li>
+<li><p>Player 1 notices the challenge in the stream connection.</p></li>
+<li><p>Player 1 accepts the challenge:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">POST</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">challenge</span><span class="o">/</span><span class="mi">12345</span>   <span class="o">-&gt;</span> <span class="nx">receives</span> <span class="mi">200</span> <span class="nx">OK</span>
+</pre></div>
+</div>
+</li>
+<li><p>Both player receive a <em>gameStart</em> on their stream connection.</p></li>
+<li><p>Player 2 has color red so he does the first movement:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">POST</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">game</span><span class="o">/</span><span class="mi">12345</span>        <span class="o">-&gt;</span> <span class="nx">receives</span> <span class="mi">200</span> <span class="nx">OK</span>
+</pre></div>
+</div>
+</li>
+<li><p>Player 1 receives a <em>move</em> on their stream connection, then he makes his move:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">POST</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">game</span><span class="o">/</span><span class="mi">12345</span>        <span class="o">-&gt;</span> <span class="nx">receives</span> <span class="mi">200</span> <span class="nx">OK</span>
+</pre></div>
+</div>
+</li>
+<li><p>Player 2 receives a <em>move</em> on their stream connection, then he makes his move:</p>
+<div class="highlight-javascript notranslate"><div class="highlight"><pre><span></span><span class="nx">POST</span> <span class="o">/</span><span class="nx">api</span><span class="o">/</span><span class="nx">game</span><span class="o">/</span><span class="mi">12345</span>        <span class="o">-&gt;</span> <span class="nx">receives</span> <span class="mi">200</span> <span class="nx">OK</span>
+</pre></div>
+</div>
+</li>
+<li><p>[… this process is repeated many times …]</p></li>
+<li><p>If the flag is captured or one player resign or run out of time,
+both player receive a <em>gameFinish</em> on their stream connection.</p></li>
+</ol>
+</div>
+<div class="section" id="future-work">
+<h2>Future work<a class="headerlink" href="#future-work" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Add functionality to download a game (in-play or finished)</p></li>
+<li><p>Add functionality to get list of players (active)</p></li>
+<li><p>Add Player registration and authentication mechanisms</p></li>
+<li><p>Add functionality to get player data (history, games, stats, ranking, rating, statistics…)</p></li>
+<li><p>Add functionality to offer and accept draws</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Sergio Orellana.
+      
+      |
+      <a href="../_sources/dev/api.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/Mr-Io/stratego" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

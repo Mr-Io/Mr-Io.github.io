@@ -1,0 +1,417 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Stratego &#8212; Games IA  documentation</title>
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Reference" href="../dev/api.html" />
+    <link rel="prev" title="Welcome to IA for games!" href="../index.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  <div class="document">
+    
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo.png" alt="Logo"/>
+    
+    <h1 class="logo logo-name">Games IA</h1>
+    
+  </a>
+</p>
+
+
+
+<p class="blurb">IA design for board-games</p>
+
+
+
+
+<p>
+<iframe src="https://ghbtns.com/github-btn.html?user=Mr-Io&repo=stratego&type=watch&count=true&size=large&v=2"
+  allowtransparency="true" frameborder="0" scrolling="0" width="200px" height="35px"></iframe>
+</p>
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Stratego</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#presentacion">Presentación</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#definicion">Definición</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#reglas-del-juego">Reglas del juego</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#variaciones">Variaciones</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#reglas-estandar">Reglas estándar</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jugadores">Jugadores</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#bando">Bando</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tipos-de-piezas">Tipos de piezas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#movimiento-de-las-piezas">Movimiento de las piezas</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ejercitos">Ejércitos</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#objetivo-del-juego">Objetivo del juego</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id1">Tablero</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparacion-del-juego">Preparación del juego</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#turnos">Turnos</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/api.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="../index.html" title="previous chapter">Welcome to IA for games!</a></li>
+      <li>Next: <a href="../dev/api.html" title="next chapter">API Reference</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="stratego">
+<h1>Stratego<a class="headerlink" href="#stratego" title="Permalink to this headline">¶</a></h1>
+<p><a class="reference external" href="https://media.giphy.com/media/sMvYXLh8fFbCU/giphy.gif"><img alt="generic shield" src="https://img.shields.io/badge/version-0.0.0-green.svg" /></a> <a class="reference external" href="https://media.giphy.com/media/sMvYXLh8fFbCU/giphy.gif"><img alt="License" src="https://img.shields.io/badge/license-por_definir-blue.svg" /></a> <a class="reference external" href="https://media.giphy.com/media/sMvYXLh8fFbCU/giphy.gif"><img alt="Contributors" src="https://img.shields.io/badge/contributors-2-red.svg" /></a></p>
+<div class="section" id="presentacion">
+<h2>Presentación<a class="headerlink" href="#presentacion" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="definicion">
+<h3>Definición<a class="headerlink" href="#definicion" title="Permalink to this headline">¶</a></h3>
+<p>Stratego es un juego de estrategia por turnos, en el que cada jugador dispone de un ejército con el que debe
+tratar de conseguir alguno de los objetivos definidos por las reglas del juego, realizando movimientos que igualmente
+están regidos por las reglas del juego.</p>
+</div>
+<div class="section" id="reglas-del-juego">
+<h3>Reglas del juego<a class="headerlink" href="#reglas-del-juego" title="Permalink to this headline">¶</a></h3>
+<p>Existen unas reglas estándar y algunas variaciones. En este documento solamente se tratarán las reglas
+estándar, pero se detallan algunas variaciones por si se decidiese implementarlas en un futuro.</p>
+</div>
+<div class="section" id="variaciones">
+<h3>Variaciones<a class="headerlink" href="#variaciones" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="tablero">
+<h4>Tablero<a class="headerlink" href="#tablero" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Con más de dos jugadores.</p></li>
+<li><p>Con un tamaño distinto al estándar.</p></li>
+<li><p>Con una forma distinta al estándar.</p></li>
+<li><p>Con casillas hexagonales u otras formas distintas a la estándar.</p></li>
+<li><p>Con orografía, de forma que algunas casillas tengan una altitud superior al resto,
+a modo de montes o colinas, provocando que las fichas situadas en esas casillas aumenten su rango
+mientras mantengan esa posición.</p></li>
+</ul>
+</div>
+<div class="section" id="ejercito">
+<h4>Ejército<a class="headerlink" href="#ejercito" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><dl class="simple">
+<dt>Con 40 piezas u otro número de piezas:</dt><dd><ul>
+<li><p>32 piezas, retirando un capitán, un teniente, un sargento, un minero, tres exploradores y
+una bomba.</p></li>
+<li><p>8 piezas (combinación llamada “barrage”) con el mariscal, el general, un minero, dos
+exploradores, el espía, una bomba y la bandera.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="combates">
+<h4>Combates<a class="headerlink" href="#combates" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Combate a ciegas: no se ven los rangos de las fichas contrarias que entran en combate, de forma
+que si la ficha contraria es superior a la nuestra seguirá en el tablero y no sabremos qué rango tiene.</p></li>
+<li><p>Capturas ocultas: no se ven los rangos de las fichas capturadas.</p></li>
+<li><p>Factor sorpresa: a igualdad de rango vence el atacante.</p></li>
+</ul>
+</div>
+<div class="section" id="rescates">
+<h4>Rescates<a class="headerlink" href="#rescates" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Rescate por alcanzar la retaguardia enemiga.</p></li>
+<li><p>Rescate por puntos obtenidos por las capturas.</p></li>
+</ul>
+</div>
+<div class="section" id="caracteristicas-de-las-piezas">
+<h4>Características de las piezas<a class="headerlink" href="#caracteristicas-de-las-piezas" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>Explorador limitado: no puede saltar varias casillas y atacar a la vez.</p></li>
+<li><p>Granadas: las bombas pueden moverse con movimiento de oficial y son de un solo uso.</p></li>
+<li><p>Espía con licencia para capturar: vence a todas las demás piezas, pero sigue siendo vulnerable a todas.</p></li>
+<li><p>Pieza ágil: algunas o todas las piezas tienen el desplazamiento de explorador, o pueden moverse dos casillas, o en diagonal.</p></li>
+<li><p>Bandera móvil: con movimiento de oficial.</p></li>
+<li><p>Aumento de rango por factor sorpresa: el atacante aumenta su graduación un rango.</p></li>
+<li><p>Artificiero por captura: algunas o todas las piezas (salvo los exploradores) adquieren la capacidad de desactivar bombas si previamente han capturado a un artificiero.</p></li>
+<li><dl class="simple">
+<dt>Ascenso por valía: cualquier ficha (salvo el mariscal) puede aumentar un rango después de capturar a una contraria, siempre que anteriormente haya sido capturada al menos una compañera del rango a ocupar. Opciones:</dt><dd><ul>
+<li><p>Se asciende de rango solo si la ficha capturada es de rango inmediatamente inferior.</p></li>
+<li><p>No todas las fichas pueden aumentar de rango.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Ascenso por coraje: cualquier ficha (salvo el mariscal) puede aumentar un rango al llegar a la línea de fondo, siempre que anteriormente haya sido capturada al menos una compañera del rango a ocupar. Opciones:</dt><dd><ul>
+<li><p>No todas las fichas pueden aumentar de rango.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
+<div class="section" id="movimiento-general-de-las-piezas">
+<h4>Movimiento general de las piezas<a class="headerlink" href="#movimiento-general-de-las-piezas" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>A la carga: se puede avanzar y desplazarse lateralmente, pero no se puede retroceder.</p></li>
+<li><p>A la carga con ataque envolvente: mismas reglas que “A la carga” pero se puede retroceder solo si es para atacar a una ficha contraria que se encuentre en la fila inmediatamente anterior.</p></li>
+<li><p>Campo a través: movimiento en diagonal para algunas o para todas las fichas.</p></li>
+<li><p>Relevo: “enrocar” dos fichas contiguas, siempre que ninguna de ellas sea una bomba ni la bandera (a menos que se esté jugando con la variación “Granadas” o “Bandera móvil”). El jugador que realice un relevo pierde un turno ya que el relevo son 2 movimientos a la vez.</p></li>
+<li><p>Marines: algunas piezas saben nadar y por tanto pueden cruzar los lagos.</p></li>
+<li><p>Deserciones: una ficha puede desertar si va a ser atacada, no teniendo por qué revelar el rango de la pieza desertora.</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="reglas-estandar">
+<h2>Reglas estándar<a class="headerlink" href="#reglas-estandar" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="jugadores">
+<h3>Jugadores<a class="headerlink" href="#jugadores" title="Permalink to this headline">¶</a></h3>
+<p>Únicamente puede haber dos jugadores. Aquel que crea la partida es el jugador 1, y el oponente que acepte las condiciones y se incorpore a la partida será el jugador 2.</p>
+</div>
+<div class="section" id="bando">
+<h3>Bando<a class="headerlink" href="#bando" title="Permalink to this headline">¶</a></h3>
+<p>Existen dos bandos posibles, rojo y azul. El primer movimiento siempre será del bando rojo.
+El jugador 1 puede elegir si desea comenzar con piezas rojas, y por tanto realizar el primer movimiento, o con piezas azules y cederle el primer movimiento al oponente.</p>
+</div>
+<div class="section" id="tipos-de-piezas">
+<h3>Tipos de piezas<a class="headerlink" href="#tipos-de-piezas" title="Permalink to this headline">¶</a></h3>
+<p>Existen 12 tipos de piezas:</p>
+<img alt="../_images/tipos_piezas.JPG" src="../_images/tipos_piezas.JPG" />
+</div>
+<div class="section" id="movimiento-de-las-piezas">
+<h3>Movimiento de las piezas<a class="headerlink" href="#movimiento-de-las-piezas" title="Permalink to this headline">¶</a></h3>
+<p>Las banderas y las bombas no se pueden mover.
+Los exploradores se pueden mover en vertical y en horizontal, tantas casillas como se quiera, pero sin poder saltar por encima de ninguna otra pieza.
+El resto de piezas se pueden mover en vertical y en horizontal, una sola casilla por turno.
+2.5. Rangos de las piezas.
+El rango de cada pieza, que va reflejado en la imagen de cada pieza, determina a quién puede capturar.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 72%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Rango</p></th>
+<th class="head"><p>Tipo de pieza</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>()</p></td>
+<td><p>Bandera</p></td>
+</tr>
+<tr class="row-odd"><td><p>()</p></td>
+<td><p>Bomba</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Espía</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Explorador</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Artificiero</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>Sargento</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>Teniente</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>Capitán</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>Comandante</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>Coronel</p></td>
+</tr>
+<tr class="row-even"><td><p>9</p></td>
+<td><p>General</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>Mariscal</p></td>
+</tr>
+</tbody>
+</table>
+<p>En caso de combate:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A igualdad de rango, ambas piezas se eliminan mutuamente.</p></li>
+<li><dl class="simple">
+<dt>A diferencia de rango, toda pieza de rango superior captura a toda pieza de rango inferior, con tres matizaciones:</dt><dd><ul>
+<li><p>Cualquier pieza puede capturar la bandera.</p></li>
+<li><p>Todas las piezas son eliminadas al encontrarse una bomba, salvo el artificiero.</p></li>
+<li><p>El espía puede capturar al mariscal si es el espía el que realiza el movimiento de ataque.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="ejercitos">
+<h3>Ejércitos<a class="headerlink" href="#ejercitos" title="Permalink to this headline">¶</a></h3>
+<p>Cada jugador dispone de un ejército de 40 piezas, compuesto por:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 45%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tipo de pieza</p></th>
+<th class="head"><p>Número de piezas</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Bandera</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Bomba</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-even"><td><p>Espía</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Explorador</p></td>
+<td><p>8</p></td>
+</tr>
+<tr class="row-even"><td><p>Artificiero</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>Sargento</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>Teniente</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>Capitán</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>Comandante</p></td>
+<td><p>3</p></td>
+</tr>
+<tr class="row-odd"><td><p>Coronel</p></td>
+<td><p>2</p></td>
+</tr>
+<tr class="row-even"><td><p>General</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p>Mariscal</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="objetivo-del-juego">
+<h3>Objetivo del juego<a class="headerlink" href="#objetivo-del-juego" title="Permalink to this headline">¶</a></h3>
+<p>El objetivo del juego es capturar la bandera del oponente o bien capturar todas sus piezas móviles.</p>
+</div>
+<div class="section" id="id1">
+<h3>Tablero<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>El tablero es cuadrado, con 10 filas y 10 columnas, teniendo por tanto 100 casillas,
+de las cuales 92 son practicables para el juego y 8 de ellas (que se detallarán más adelante) no son jugables.
+Los jugadores se colocan uno enfrente del otro.
+Las columnas se nombran A, B, C, D, E, F, G, H, I y J, de izquierda a derecha desde el punto de vista del jugador 1,
+por tanto, la columna A es la que está a la izquierda del todo para el jugador 1 y a la derecha del todo para el jugador 2.
+Las filas se nombran 1, 2, 3, 4, 5, 6, 7, 8, 9 y 10, de abajo a arriba desde el punto de vista del jugador 1,
+por tanto, la fila 1 es la más cercana al jugador 1 y la más lejana del jugador 2.
+Las 8 casillas no practicables para el juego son: C5, D5, G5, H5, C6, D6, G6 y H6.
+Ejemplo de tablero, con las casillas no practicables señaladas en rojo:</p>
+<img alt="../_images/tablero.JPG" src="../_images/tablero.JPG" />
+</div>
+<div class="section" id="preparacion-del-juego">
+<h3>Preparación del juego<a class="headerlink" href="#preparacion-del-juego" title="Permalink to this headline">¶</a></h3>
+<p>Las piezas se colocan en las cuatro filas más próximas a cada jugador, una en cada casilla,
+con el dorso de las mismas hacia el oponente, que no podrá ver a qué rango corresponde cada una.
+Cada pieza puede colocarse en cualquiera de las 40 casillas iniciales, con una sola excepción,
+no pueden colocarse 6 piezas inmóviles en las únicas 6 casillas desde las cuales se puede realizar el primer movimiento,
+ya que esto le impediría al jugador realizar un movimiento en su primer turno.</p>
+</div>
+<div class="section" id="turnos">
+<h3>Turnos<a class="headerlink" href="#turnos" title="Permalink to this headline">¶</a></h3>
+<p>Cada jugador, en cada uno de sus turnos, podrá mover una de sus piezas a una de las casillas jugables, atendiendo
+a la movilidad del rango de la pieza que desee mover, y colocarla en una casilla libre
+o bien en una casilla ocupada por una pieza contraria, es decir, atacar a una pieza.
+Las piezas sólo pueden moverse entre dos casillas concretas un máximo de 3 veces. No es obligatorio atacar.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+    <div class="clearer"></div>
+  </div>
+    <div class="footer">
+      &copy;2020, Sergio Orellana.
+      
+      |
+      <a href="../_sources/user/juego.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+    <a href="https://github.com/Mr-Io/stratego" class="github">
+        <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"  class="github"/>
+    </a>
+    
+
+    
+  </body>
+</html>

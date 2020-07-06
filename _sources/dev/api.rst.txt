@@ -1,0 +1,299 @@
+API Reference
+=============
+
+.. only:: html
+
+    .. include:: ../../README.rst
+        :start-after: ini-badges
+        :end-before: end-badges
+
+This is the API reference for playing games using the Game Control Server (GCS).
+
+The main purpose of the GCS is to host games, its responsibilities include:
+
+*   To manage challenges and games
+*   To guaranteeing that the rules of each specific game are followed
+*   To detect when a game is finished, indicating the winner
+
+(Note: the responses are all *application/json*)
+
+**This API is designed following the OpenAPI specification, being simple but
+also flexible enough for any turn-based board game.**
+
+User session
+------------
+
+.. code-block:: javascript
+
+    GET /api/user/{username}
+
+*   This should initiate a user session (without authentication) 
+*   If the user doesn't exist, a new user must be created on the fly
+
+*   **Response** (200 OK)
+
+    .. code-block:: javascript
+    
+        {
+            "userid": "sergio",
+            "username": "Sergio",
+        }
+    
+For the usage of the rest of the api, the user must have initiated session first.
+
+Connection and events
+---------------------
+.. code-block:: javascript
+
+    GET /api/stream/event
+
+*   This is usually the second step just after initiating the session
+*   This is a permanent connection (stream of data)
+*   The different types of events are:
+
+    *   *gameStart*
+    *   *gameFinish*
+    *   *challenge*
+    *   *challengeCancelled*
+    *   *challengeDeclined*
+    *   *move*
+
+
+*   **Responses**
+
+    *   When *gameStart* (200 OK):
+
+        .. code-block:: json
+
+            {
+                "type": "gameStart",
+                "gameid": 72391,
+                "time": 3600,
+                "increment": 15,
+                "variant": "estratego-2players-board3",
+                "color": "random",
+                "opponent": "sergio",
+            }
+
+
+    *   When *gameFinish* (200 OK) notice that a game is defined by the initial positions
+        of the players and the movements done (the meaning of the fields are explained latter):
+
+        .. code-block:: json
+
+            {
+                "type": "gameFinish",
+                "gameid": 72391,
+                "player1": "sergio-red",
+                "player2": "mario-blue",
+                "initpos1": "a3 i4 j4 [...] h1",
+                "initpos2": " a4 i7 j7 [...] h10",
+                "moves": "a4a5 j7j6 a5a6 j6j5 [...]",
+                "winner": "sergio-red",
+            }
+
+    *   When *challenge* (200 OK):
+
+        .. code-block:: json
+
+            {
+                "type": "challenge",
+                "gameid": 15341,
+                "time": 3600,
+                "increment": 15,
+                "variant": "estratego-2players-board3",
+                "color": "random",
+            }
+
+    *   When *challengeCancelled* (200 OK): 
+
+        .. code-block:: json
+
+            {
+                "type": "challengeCancelled",
+                "gameid": 15341,
+            }
+
+    *   When *challengeDeclined* (200 OK):
+
+        .. code-block:: json
+
+            {
+                "type": "challengeDeclined",
+                "gameid": 15341,
+            }
+
+    *   When *move*:
+
+        .. code-block:: json
+
+            {
+                "type": "move",
+                "gameid": 417940,
+                "move": "a4a5",
+                "time-left": 600,
+            }
+
+Make a challenge
+----------------
+
+.. code-block:: javascript
+
+    POST /api/challenge
+
+    {
+        "user": "any",
+        "time": 120,
+        "increment": 15,
+        "variant": "estratego-2players-board3",
+        "color": "random",
+        "initpos": "a3 i4 j4 [...] h1",
+    }
+
+*   The challenge is maintained until the connection is closed or
+    the challenge is accepted/declined 
+*   The initial position of the player pieces is indicated in *initpos*. 
+    The order (and number) of pieces is defined by the *variant* of that specific game. 
+    The default ordering is the following:
+
+        #. Mariscal     x1
+        #. General	    x1  
+        #. Coronel	    x2  
+        #. Comandante   x3  
+        #. Capitán	    x4  
+        #. Teniente	    x4  
+        #. Sargento	    x4  
+        #. Minador      x5  
+        #. Explorador   x8  
+        #. Espía        x1  
+        #. Bomba        x6  
+        #. Bandera      x1  
+
+*   **Response** (200 OK)
+
+    .. code-block:: javascript
+
+        {
+            "gameid": 12345,
+            "ok": "true",
+        }
+
+
+Accept/decline
+--------------
+
+.. code-block:: javascript
+
+    POST /api/challenge/{challengeid}
+
+    {
+        "action": "accept",
+        "initpos": " a4 i7 j7 [...] h10",
+    }
+
+.. code-block:: javascript
+
+    POST /api/challenge/{challengeid}
+
+    {
+        "action": "decline",
+    }
+
+*   *initpos* is mandatory when accepting a challenge.
+*   The number and order for the *initpos* is defined by the game *variant*
+
+*    **Response** (200 OK)
+
+    .. code-block:: javascript
+
+        {
+            "ok": "true",
+        }
+
+Make a move
+-----------
+
+.. code-block:: javascript
+
+    POST /api/game/{gameid}
+
+    {
+        "move": "a4a5",
+    }
+
+*   A move its defined by its initial and final position.
+*   If the player wants to resign, the *move* is set to *"resign"*.
+
+*   **Response** (200 OK)
+
+    .. code-block:: javascript
+    
+        {
+            "ok": "true",
+        }
+
+Game example
+------------
+
+1.  Player 1 connects:
+
+    .. code-block:: javascript
+    
+        GET /api/user/player1       -> receive 200 OK 
+        GET /api/stream/event       -> maintain connection
+
+2.  Player 2 connects:
+
+    .. code-block:: javascript
+        
+        GET /api/user/player2       -> receive 200 OK
+        GET /api/stream/event       -> maintain connection 
+
+3.  Player 2 makes a challenge (to *"any"* or to *"player1*):
+
+    .. code-block:: javascript
+
+        POST /api/challenge         -> receives 200 OK 
+
+4.  Player 1 notices the challenge in the stream connection.
+
+5.  Player 1 accepts the challenge:
+
+    .. code-block:: javascript
+
+        POST /api/challenge/12345   -> receives 200 OK 
+
+6.  Both player receive a *gameStart* on their stream connection. 
+
+7.  Player 2 has color red so he does the first movement:
+
+    .. code-block:: javascript
+
+        POST /api/game/12345        -> receives 200 OK
+
+8.  Player 1 receives a *move* on their stream connection, then he makes his move:
+
+    .. code-block:: javascript
+
+        POST /api/game/12345        -> receives 200 OK
+
+9.  Player 2 receives a *move* on their stream connection, then he makes his move:
+
+    .. code-block:: javascript
+
+        POST /api/game/12345        -> receives 200 OK
+
+10. [... this process is repeated many times ...]
+
+11. If the flag is captured or one player resign or run out of time,
+    both player receive a *gameFinish* on their stream connection. 
+
+
+Future work
+-----------
+
+*   Add functionality to download a game (in-play or finished)
+*   Add functionality to get list of players (active)
+*   Add Player registration and authentication mechanisms
+*   Add functionality to get player data (history, games, stats, ranking, rating, statistics...)
+*   Add functionality to offer and accept draws

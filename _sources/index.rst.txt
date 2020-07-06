@@ -1,0 +1,29 @@
+.. Stratego documentation master file, created by
+   sphinx-quickstart on Sun Dec 22 21:45:48 2019.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
+Welcome to IA for games!
+========================
+
+.. only:: html
+
+    .. include:: ../README.rst
+        :start-after: ini-badges
+        :end-before: end-badges
+
+.. toctree::
+    :maxdepth: 3
+
+    user/juego
+    dev/api
+
+
+.. only:: html
+
+    Indices and tables
+    ==================
+
+    * :ref:`genindex`
+    * :ref:`modindex`
+    * :ref:`search`
